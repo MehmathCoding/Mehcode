@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mehmath Coding LMS v8.7 - Professional Academic Space</title>
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0f1319;
+            --bg-sidebar: #161b22;
+            --bg-card: #1f242c;
+            --bg-input: #12161a;
+            --primary: #4f6b85;
+            --primary-hover: #6384a3;
+            --accent-crimson: #7c1a22;
+            --accent-crimson-hover: #96232c;
+            --text-main: #e2e8f0;
+            --text-muted: #8a99ad;
+            --success: #10b981;
+            --border-color: #2a313c;
+            --sidebar-active: #232a35;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Top Header Navigation Split Layout */
+        header {
+            background-color: var(--bg-sidebar);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .brand-name {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .brand-slogan {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--accent-crimson-hover);
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        .btn-crimson { background-color: var(--accent-crimson); color: white; }
+        .btn-crimson:hover { background-color: var(--accent-crimson-hover); }
+        .btn-outline { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
+        .btn-outline:hover { background-color: var(--sidebar-active); }
+
+        /* Core Layout Workspace */
+        .workspace {
+            display: flex;
+            flex: 1;
+        }
+
+        /* Interactive Left Sidebar */
+        sidebar {
+            width: 260px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-item {
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: var(--sidebar-active);
+            color: var(--text-main);
+        }
+
+        .sidebar-item.active {
+            border-left: 4px solid var(--primary);
+            border-radius: 4px 8px 8px 4px;
+            padding-left: 12px;
+        }
+
+        /* Main Dashboard Content Stream */
+        main {
+            flex: 1;
+            padding: 35px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .view-title-block {
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .view-title-block h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .view-title-block p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Modern Grid Architecture */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 25px; }
+        .grid-dashboard { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
+
+        /* Premium Dashboard Cards */
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Form Elements & Inputs */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input[type="text"], input[type="password"], select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(79, 107, 133, 0.2);
+        }
+
+        /* Analytical Data Widgets */
+        .metric-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .metric-box {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .metric-val { font-size: 28px; font-weight: 700; color: var(--text-main); }
+        .metric-lbl { font-size: 12px; color: var(--text-muted); text-transform: uppercase; margin-top: 5px; }
+
+        /* Specific Lists & Custom Containers */
+        .assignment-item {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .assignment-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin-top: 12px;
+            border: 1px solid var(--border-color);
+            max-height: 350px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .pdf-badge {
+            background: #1e293b;
+            border: 1px solid #ef4444;
+            color: #f87171;
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .pdf-badge:hover {
+            background: #273549;
+        }
+
+        @media (max-width: 1024px) {
+            .grid-dashboard, .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .workspace { flex-direction: column; }
+            sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .metric-row { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand-container">
+        <div class="brand-name">Mehmath Coding</div>
+        <span class="brand-slogan">Bir Soru Bir Konu Öğretir</span>
+    </div>
+    <div class="header-actions" id="auth-header-actions">
+        <button class="btn btn-outline" onclick="initiateLoginForm()">Giriş Yap</button>
+        <button class="btn btn-primary" onclick="initiateRegistrationForm()">Hesap Aç</button>
+    </div>
+</header>
+
+<div class="workspace">
+    <sidebar>
+        <div class="sidebar-item active" id="side-home" onclick="initiateView('landing-view')">🏠 Ana Panel</div>
+        <div class="sidebar-item" id="side-admin" style="display:none;" onclick="initiateView('admin-view')">👨‍🏫 Hoca Yönetim Paneli</div>
+        <div class="sidebar-item" id="side-student" style="display:none;" onclick="initiateView('student-view')">🎓 Öğrenci Portalı</div>
+    </sidebar>
+
+    <main>
+        <!-- SECTION 1: LANDING VIEW -->
+        <div id="landing-view" class="page-section" style="display: block;">
+            <div class="view-title-block">
+                <h1>Mehmath Coding Eğitim Akademisi</h1>
+                <p>Gelişmiş veri mimarisi entegrasyonu ile akademik yönetim ve canlı ödev portalı.</p>
+            </div>
+            <div class="card" style="text-align: center; padding: 50px 20px;">
+                <h2 style="font-size: 28px; margin-bottom: 15px;">Akademik Geleceğinizi Kodlayın</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 30px auto;">
+                    Sınıf atlatma otomasyonu, canlı günün sorusu takibi ve yetkilendirilmiş hoca kaynak havuzları ile donatılmış yeni nesil öğrenme yönetim sistemi.
+                </p>
+                <button class="btn btn-crimson" style="padding: 15px 35px; font-size: 16px;" onclick="initiateRegistrationForm()">Hemen Ders Talebi Oluştur</button>
+            </div>
+        </div>
+
+        <!-- SECTION 2: AUTH PANEL -->
+        <div id="auth-panel" class="page-section">
+            <div class="view-title-block">
+                <h1 id="auth-header-title">Sisteme Giriş Yap</h1>
+                <p id="auth-header-desc">LMS v8.7 güvenli kimlik doğrulama geçidi.</p>
+            </div>
+            <div class="card" style="max-width: 450px; margin: 0 auto;">
+                <div class="form-group">
+                    <label>Kullanıcı Adı</label>
+                    <input type="text" id="auth-username" placeholder="Kullanıcı adınızı girin">
+                </div>
+                <div class="form-group">
+                    <label>Erişim Şifresi</label>
+                    <input type="password" id="auth-password" placeholder="••••••••">
+                </div>
+                <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" id="auth-submit-btn" onclick="processAuthentication()">Doğrula ve Bağlan</button>
+                <p id="auth-hoca-tip" style="margin-top: 20px; font-size: 12px; color: var(--text-muted); text-align: center;">
+                    Mehmet Hoca Paneli Girişi: <strong>Mehmet Hoca</strong> / <strong>admin123</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- SECTION 3: CLASS INITIAL SELECTION -->
+        <div id="class-setup-view" class="page-section">
+            <div class="view-title-block">
+                <h1>Akademik Sınıf Tanımlama</h1>
+                <p>Hesabınızın ders programını optimize etmek için geçerli seviyenizi belirtiniz.</p>
+            </div>
+            <div class="card" style="max-width: 450px; margin: 0 auto;">
+                <div class="form-group">
+                    <label>Eğitim Kademesi</label>
+                    <select id="setup-student-class">
+                        <option value="9">9. Sınıf</option>
+                        <option value="10">10. Sınıf</option>
+                        <option value="11">11. Sınıf</option>
+                        <option value="12">12. Sınıf</option>
+                        <option value="Üniversite">Üniversite</option>
+                        <option value="Mezun">Mezun</option>
+                    </select>
+                </div>
+                <button class="btn btn-crimson" style="width: 100%;" onclick="executeClassSetupSave()">Profili Kaydet ve Giriş Yap</button>
+            </div>
+        </div>
+
+        <!-- SECTION 4: INSTRUCTOR DASHBOARD -->
+        <div id="admin-view" class="page-section">
+            <div class="view-title-block">
+                <h1>Hoca Yönetim Paneli</h1>
+                <p>Mehmath Coding akademik kadro kontrol ve yönetim konsolu.</p>
+            </div>
+
+            <div class="metric-row">
+                <div class="metric-box"><div class="metric-val">8.7</div><div class="metric-lbl">Sistem Versiyonu</div></div>
+                <div class="metric-box"><div class="metric-val" id="m-student-count">0</div><div class="metric-lbl">Kayıtlı Öğrenci</div></div>
+                <div class="metric-box"><div class="metric-val" id="m-hw-count">0</div><div class="metric-lbl">Aktif Ödev Seti</div></div>
+                <div class="metric-box"><div class="metric-val" style="color: var(--success);">Aktif</div><div class="metric-lbl">Hoca Yetki Seviyesi</div></div>
+            </div>
+
+            <div class="grid-dashboard">
+                <div>
+                    <div class="card">
+                        <h3>📝 Yeni Soru ve Ödev Yayını</h3>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Hedef Sınıf Seviyesi</label>
+                                <select id="adm-hw-class">
+                                    <option value="9">9. Sınıf</option>
+                                    <option value="10">10. Sınıf</option>
+                                    <option value="11">11. Sınıf</option>
+                                    <option value="12">12. Sınıf</option>
+                                    <option value="Üniversite">Üniversite</option>
+                                    <option value="Mezun">Mezun</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <!-- UPGRADED FILE TYPE TO SUPPORT BOTH IMAGES AND PDF FILES -->
+                                <label>Görsel veya PDF Materyali</label>
+                                <input type="file" id="adm-hw-file" accept="image/*, application/pdf">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Ödev Yönergesi veya Soru İçeriği</label>
+                            <textarea id="adm-hw-text" rows="4" placeholder="Metin bazlı soru veya ödev detaylarını giriniz..."></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="submitNewHomeworkByAdmin()">Yayına Al ve Gönder</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>🌟 Günün Sorusunu Güncelle</h3>
+                        <p style="color: var(--text-muted); font-size:13px; margin-bottom:15px;">Her akademik kademe için o güne özel tek bir soru havuzu tanımlanır.</p>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Hedef Sınıf</label>
+                                <select id="adm-qotd-class">
+                                    <option value="9">9. Sınıf</option>
+                                    <option value="10">10. Sınıf</option>
+                                    <option value="11">11. Sınıf</option>
+                                    <option value="12">12. Sınıf</option>
+                                    <option value="Üniversite">Üniversite</option>
+                                    <option value="Mezun">Mezun</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <!-- UPGRADED FILE TYPE TO SUPPORT BOTH IMAGES AND PDF FILES -->
+                                <label>Soru Görseli veya PDF</label>
+                                <input type="file" id="adm-qotd-file" accept="image/*, application/pdf">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Soru Metni</label>
+                            <textarea id="adm-qotd-text" rows="3" placeholder="Günün sorusu metnini yazın..."></textarea>
+                        </div>
+                        <button class="btn btn-crimson" onclick="submitQuestionOfTheDayByAdmin()">Günün Sorusunu Değiştir</button>
+                    </div>
+
+                    <div class="card" style="border-top: 4px solid var(--accent-crimson);">
+                        <h3>🔒 Hoca Yetkili Özel Veri Havuzu</h3>
+                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Bu alana yalnızca Mehmet Hoca giriş yaptığında erişebilir, öğrenciler bu alanı göremez.</p>
+                        <div class="grid-3">
+                            <div style="background: var(--bg-input); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <h4 style="font-size: 14px; margin-bottom: 8px;">📂 Premium Soru Bankası</h4>
+                                <button class="btn btn-outline" style="width: 100%; padding: 6px;" onclick="alert('Premium PDF indiriliyor...')">İndir</button>
+                            </div>
+                            <div style="background: var(--bg-input); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <h4 style="font-size: 14px; margin-bottom: 8px;">🔑 Çözüm Kodları</h4>
+                                <button class="btn btn-outline" style="width: 100%; padding: 6px;" onclick="alert('Kodlar listeleniyor...')">Aç</button>
+                            </div>
+                            <div style="background: var(--bg-input); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                <h4 style="font-size: 14px; margin-bottom: 8px;">📈 Sınav Matrisi</h4>
+                                <button class="btn btn-outline" style="width: 100%; padding: 6px;" onclick="alert('Matris yükleniyor...')">Görüntüle</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card">
+                        <h3>📅 Ders Programı & Özel Notlar</h3>
+                        <div class="form-group">
+                            <label>Hoca Ajandası</label>
+                            <textarea id="adm-schedule-notepad" rows="12" placeholder="Haftalık ders programınızı ve özel notlarınızı buraya işleyebilirsiniz..."></textarea>
+                        </div>
+                        <button class="btn btn-outline" style="width: 100%;" onclick="persistAdminScheduleData()">Programı Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 5: STUDENT PORTAL -->
+        <div id="student-view" class="page-section">
+            <div class="view-title-block">
+                <h1 id="std-panel-title">Öğrenci Akademik Paneli</h1>
+                <p>Size özel tanımlanmış ödevler, kişisel ilerleme raporu ve günün sorusu alanı.</p>
+            </div>
+
+            <div class="grid-dashboard">
+                <div>
+                    <div class="card" style="border-left: 5px solid var(--success);">
+                        <h3>🌟 Bugünün Sınıf Sorusu</h3>
+                        <div id="std-qotd-render-area" style="margin: 15px 0;"></div>
+                        <div id="std-qotd-interaction-form" style="border-top: 1px solid var(--border-color); padding-top: 15px; margin-top: 15px;">
+                            <div class="form-group">
+                                <label>Senin Yanıtın & Çözüm Analizin</label>
+                                <textarea id="std-qotd-response-input" rows="3" placeholder="Çözüm basamaklarını veya nihai cevabını yaz..."></textarea>
+                            </div>
+                            <button class="btn btn-primary" onclick="persistStudentQotdAnswerData()">Yanıtı Sisteme Gönder</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>📚 Sınıfıma Ait Aktif Ödev Akışı</h3>
+                        <div id="std-homework-stream-container" style="margin-top: 15px;"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card">
+                        <h3>📝 Kişisel Notlarım</h3>
+                        <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 12px;">Yıl boyunca veritabanınızda saklanacak şahsi çalışma ajandanız.</p>
+                        <div class="form-group">
+                            <textarea id="std-personal-notes-input" rows="12" placeholder="Formülleri, ders notlarını veya hedeflerini buraya not et..."></textarea>
+                        </div>
+                        <button class="btn btn-outline" style="width: 100%;" onclick="persistStudentPersonalNotes()">Notlarımı Güncelle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    let authenticatedUser = null;
+    let registrationFlowActive = false;
+
+    if(!localStorage.getItem('users')) localStorage.setItem('users', JSON.stringify([]));
+    if(!localStorage.getItem('homeworks')) localStorage.setItem('homeworks', JSON.stringify([]));
+    if(!localStorage.getItem('qotd')) localStorage.setItem('qotd', JSON.stringify({}));
+    if(!localStorage.getItem('adminSchedule')) localStorage.setItem('adminSchedule', '');
+
+    function initiateView(targetViewId) {
+        document.querySelectorAll('sidebar .sidebar-item').forEach(item => item.classList.remove('active'));
+        const activeItem = document.querySelector(`sidebar [onclick="initiateView('${targetViewId}')"]`);
+        if(activeItem) activeItem.classList.add('active');
+
+        document.querySelectorAll('main .page-section').forEach(view => view.style.display = 'none');
+        document.getElementById(targetViewId).style.display = 'block';
+
+        if(targetViewId === 'admin-view') refreshAdminDashboardMetrics();
+        if(targetViewId === 'student-view') renderStudentDashboardContext();
+    }
+
+    function initiateLoginForm() {
+        registrationFlowActive = false;
+        initiateView('auth-panel');
+        document.getElementById('auth-header-title').innerText = 'Sisteme Giriş Yap';
+        document.getElementById('auth-header-desc').innerText = 'LMS v8.7 güvenli kimlik doğrulama geçidi.';
+        document.getElementById('auth-submit-btn').innerText = 'Doğrula ve Bağlan';
+        document.getElementById('auth-hoca-tip').style.display = 'block';
+        clearAuthInputs();
+    }
+
+    function initiateRegistrationForm() {
+        registrationFlowActive = true;
+        initiateView('auth-panel');
+        document.getElementById('auth-header-title').innerText = 'Ders Talebi Oluştur / Hesap Aç';
+        document.getElementById('auth-header-desc').innerText = 'Yeni öğrenci kaydı oluşturma ve profil tanımlama ekranı.';
+        document.getElementById('auth-submit-btn').innerText = 'Kayıt Ol ve Profil Oluştur';
+        document.getElementById('auth-hoca-tip').style.display = 'none';
+        clearAuthInputs();
+    }
+
+    function clearAuthInputs() {
+        document.getElementById('auth-username').value = '';
+        document.getElementById('auth-password').value = '';
+    }
+
+    function processAuthentication() {
+        const usernameVal = document.getElementById('auth-username').value.trim();
+        const passwordVal = document.getElementById('auth-password').value;
+        if(!usernameVal || !passwordVal) return alert("Hata: Kimlik doğrulama alanları boş bırakılamaz.");
+
+        let databaseUsers = JSON.parse(localStorage.getItem('users'));
+
+        if (!registrationFlowActive) {
+            if(usernameVal === "Mehmet Hoca") {
+                if(passwordVal === "admin123") {
+                    executeUserSessionEstablishment({username: usernameVal, role: 'admin'});
+                } else {
+                    alert("Hatalı yönetici hoca şifresi!");
+                }
+                return;
+            }
+            const matchingProfile = databaseUsers.find(u => u.username === usernameVal && u.password === passwordVal);
+            if(matchingProfile) {
+                executeUserSessionEstablishment(matchingProfile);
+            } else {
+                alert("Doğrulama Başarısız: Kullanıcı adı ya da şifre sistemde eşleşmedi.");
+            }
+        } else {
+            if(usernameVal === "Mehmet Hoca") return alert("Bu rezerve edilmiş hoca kullanıcı adı ile yeni kayıt oluşturulamaz.");
+            if(databaseUsers.find(u => u.username === usernameVal)) {
+                return alert("Bu kullanıcı adı veritabanında zaten mevcut.");
+            }
+
+            const registeredProfile = {
+                username: usernameVal, password: passwordVal, role: 'student', grade: null, notes: '', answers: {}, lastPromotionYear: new Date().getFullYear()
+            };
+            databaseUsers.push(registeredProfile);
+            localStorage.setItem('users', JSON.stringify(databaseUsers));
+            executeUserSessionEstablishment(registeredProfile);
+        }
+    }
+
+    function executeUserSessionEstablishment(profileData) {
+        authenticatedUser = processAutomaticGradePromotion(profileData);
+        synchronizeUserProfileToStorage(authenticatedUser);
+
+        document.getElementById('auth-header-actions').innerHTML = `
+            <span style="font-weight:600; color:var(--text-main); font-size:14px;">⚡ ${authenticatedUser.username}</span>
+            <button class="btn btn-outline" style="padding: 6px 12px; font-size:12px;" onclick="promptProfilePasswordChange()">Şifre Değiştir</button>
+            <button class="btn btn-crimson" style="padding: 6px 12px; font-size:12px;" onclick="terminateSession()">Oturumu Kapat</button>
+        `;
+
+        if(authenticatedUser.role === 'admin') {
+            document.getElementById('side-admin').style.display = 'flex';
+            document.getElementById('side-student').style.display = 'none';
+            initiateView('admin-view');
+        } else {
+            document.getElementById('side-admin').style.display = 'none';
+            document.getElementById('side-student').style.display = 'flex';
+            if(!authenticatedUser.grade) {
+                initiateView('class-setup-view');
+            } else {
+                initiateView('student-view');
+            }
+        }
+    }
+
+    function processAutomaticGradePromotion(userObj) {
+        if(userObj.role === 'admin' || userObj.grade === 'Üniversite' || userObj.grade === 'Mezun') return userObj;
+        const timestamp = new Date();
+        const yearRef = timestamp.getFullYear();
+        const monthRef = timestamp.getMonth();
+
+        if(!userObj.lastPromotionYear) userObj.lastPromotionYear = yearRef;
+
+        if (monthRef >= 5 && yearRef > userObj.lastPromotionYear) {
+            let numericGrade = parseInt(userObj.grade);
+            if (!isNaN(numericGrade)) {
+                if (numericGrade < 12) userObj.grade = (numericGrade + 1).toString();
+                else if (numericGrade === 12) userObj.grade = 'Üniversite';
+            }
+            userObj.lastPromotionYear = yearRef;
+            alert(`Mehmath Otomasyon Bilgilendirmesi: Sınıf atlatma tetiklendi! Güncel Kademeniz: ${userObj.grade}. Sınıf`);
+        }
+        return userObj;
+    }
+
+    function executeClassSetupSave() {
+        authenticatedUser.grade = document.getElementById('setup-student-class').value;
+        synchronizeUserProfileToStorage(authenticatedUser);
+        initiateView('student-view');
+    }
+
+    function synchronizeUserProfileToStorage(profile) {
+        if(profile.role === 'admin') return;
+        let pool = JSON.parse(localStorage.getItem('users'));
+        let ptr = pool.findIndex(x => x.username === profile.username);
+        if(ptr !== -1) {
+            pool[ptr] = profile;
+            localStorage.setItem('users', JSON.stringify(pool));
+        }
+    }
+
+    function terminateSession() {
+        authenticatedUser = null;
+        document.getElementById('auth-header-actions').innerHTML = `
+            <button class="btn btn-outline" onclick="initiateLoginForm()">Giriş Yap</button>
+            <button class="btn btn-primary" onclick="initiateRegistrationForm()">Hesap Aç</button>
+        `;
+        document.getElementById('side-admin').style.display = 'none';
+        document.getElementById('side-student').style.display = 'none';
+        clearAuthInputs();
+        initiateView('landing-view');
+    }
+
+    function promptProfilePasswordChange() {
+        if(authenticatedUser.role === 'admin') return alert("Sistem admin parolası yalnızca kaynak kod mimarisinden güncellenebilir.");
+        const mutationKey = prompt("Yeni hesap erişim şifrenizi tanımlayın:");
+        if(mutationKey && mutationKey.trim() !== '') {
+            authenticatedUser.password = mutationKey.trim();
+            synchronizeUserProfileToStorage(authenticatedUser);
+            alert("Şifre güncelleme işlemi başarıyla tamamlandı.");
+        }
+    }
+
+    function refreshAdminDashboardMetrics() {
+        const studentPool = JSON.parse(localStorage.getItem('users')) || [];
+        const hwPool = JSON.parse(localStorage.getItem('homeworks')) || [];
+        document.getElementById('m-student-count').innerText = studentPool.filter(x => x.role === 'student').length;
+        document.getElementById('m-hw-count').innerText = hwPool.length;
+        document.getElementById('adm-schedule-notepad').value = localStorage.getItem('adminSchedule') || '';
+    }
+
+    function persistAdminScheduleData() {
+        localStorage.setItem('adminSchedule', document.getElementById('adm-schedule-notepad').value);
+        alert("Ajanda ve program verileri başarıyla mühürlendi.");
+    }
+
+    // Dynamic support for handling both PDF and Image files
+    function submitNewHomeworkByAdmin() {
+        const selectedClass = document.getElementById('adm-hw-class').value;
+        const directiveText = document.getElementById('adm-hw-text').value;
+        const assetFileRef = document.getElementById('adm-hw-file');
+
+        if(!directiveText && assetFileRef.files.length === 0) return alert("Hata: İçeriğe dair bir metin, görsel veya PDF seçmelisiniz.");
+
+        let hwPayload = {
+            id: Date.now(), grade: selectedClass, text: directiveText, fileData: null, fileType: null, date: new Date().toLocaleDateString('tr-TR')
+        };
+
+        if(assetFileRef.files.length > 0) {
+            const fileObj = assetFileRef.files[0];
+            const fileReaderObj = new FileReader();
+            fileReaderObj.onload = function(e) {
+                hwPayload.fileData = e.target.result;
+                hwPayload.fileType = fileObj.type; // Store exact mime type (image/* or application/pdf)
+                commitHomeworkToMemory(hwPayload);
+            };
+            fileReaderObj.readAsDataURL(fileObj);
+        } else {
+            commitHomeworkToMemory(hwPayload);
+        }
+    }
+
+    function commitHomeworkToMemory(payload) {
+        let collection = JSON.parse(localStorage.getItem('homeworks'));
+        collection.push(payload);
+        localStorage.setItem('homeworks', JSON.stringify(collection));
+        document.getElementById('adm-hw-text').value = '';
+        document.getElementById('adm-hw-file').value = '';
+        refreshAdminDashboardMetrics();
+        alert(`Sistem Yayını: ${payload.grade} kademesi için yeni materyal (Ödev/PDF) akışa işlendi.`);
+    }
+
+    function submitQuestionOfTheDayByAdmin() {
+        const targetedClass = document.getElementById('adm-qotd-class').value;
+        const textPayload = document.getElementById('adm-qotd-text').value;
+        const visualAssetRef = document.getElementById('adm-qotd-file');
+
+        if(!textPayload && visualAssetRef.files.length === 0) return alert("Hata: Günün sorusu için metin açıklaması, görsel veya PDF yükleme zorunludur.");
+
+        let qotdStorageMatrix = JSON.parse(localStorage.getItem('qotd'));
+        let packageInstance = { id: Date.now(), text: textPayload, fileData: null, fileType: null };
+
+        if(visualAssetRef.files.length > 0) {
+            const fileObj = visualAssetRef.files[0];
+            const readerInstance = new FileReader();
+            readerInstance.onload = function(e) {
+                packageInstance.fileData = e.target.result;
+                packageInstance.fileType = fileObj.type;
+                qotdStorageMatrix[targetedClass] = packageInstance;
+                localStorage.setItem('qotd', JSON.stringify(qotdStorageMatrix));
+                completeQotdAdminRoutine(targetedClass);
+            };
+            readerInstance.readAsDataURL(fileObj);
+        } else {
+            qotdStorageMatrix[targetedClass] = packageInstance;
+            localStorage.setItem('qotd', JSON.stringify(qotdStorageMatrix));
+            completeQotdAdminRoutine(targetedClass);
+        }
+    }
+
+    function completeQotdAdminRoutine(cls) {
+        document.getElementById('adm-qotd-text').value = '';
+        document.getElementById('adm-qotd-file').value = '';
+        alert(`Günün Sorusu: ${cls} kademesi için yeni günün sorusu/PDF'i başarıyla yayına alındı.`);
+    }
+
+    // Advanced rendering logic to separate PDF and Images inside student panels
+    function renderStudentDashboardContext() {
+        document.getElementById('std-panel-title').innerText = `${authenticatedUser.grade} Öğrenci Paneli`;
+        document.getElementById('std-personal-notes-input').value = authenticatedUser.notes || '';
+        
+        const qotdDisplay = document.getElementById('std-qotd-render-area');
+        const responseTextarea = document.getElementById('std-qotd-response-input');
+        qotdDisplay.innerHTML = '';
+        
+        let allQotdRegistry = JSON.parse(localStorage.getItem('qotd'));
+        let targetedQotd = allQotdRegistry[authenticatedUser.grade];
+
+        if(!targetedQotd) {
+            qotdDisplay.innerHTML = '<p style="color:var(--text-muted); font-style:italic; font-size:14px;">Sınıfınız kademesinde bugün için paylaşılan günün sorusu bulunmamaktadır.</p>';
+            document.getElementById('std-qotd-interaction-form').style.display = 'none';
+        } else {
+            document.getElementById('std-qotd-interaction-form').style.display = 'block';
+            let contentBuilder = '';
+            if(targetedQotd.text) contentBuilder += `<p style="font-size:15px; line-height:1.6; margin-bottom:12px;">${targetedQotd.text}</p>`;
+            
+            if(targetedQotd.fileData) {
+                if(targetedQotd.fileType && targetedQotd.fileType.includes('pdf')) {
+                    contentBuilder += `<a href="${targetedQotd.fileData}" download="gunun-sorusu.pdf" class="pdf-badge">📄 Günün Sorusu PDF Dokümanını İndir</a>`;
+                } else {
+                    contentBuilder += `<img src="${targetedQotd.fileData}" class="assignment-img">`;
+                }
+            }
+            qotdDisplay.innerHTML = contentBuilder;
+            
+            if(!authenticatedUser.answers) authenticatedUser.answers = {};
+            responseTextarea.value = authenticatedUser.answers[targetedQotd.id] || '';
+        }
+
+        const streamContainer = document.getElementById('std-homework-stream-container');
+        streamContainer.innerHTML = '';
+        let fullHwList = JSON.parse(localStorage.getItem('homeworks')) || [];
+        let filteredHw = fullHwList.filter(x => x.grade === authenticatedUser.grade).reverse();
+
+        if(filteredHw.length === 0) {
+            streamContainer.innerHTML = '<p style="color:var(--text-muted); font-size:14px;">Şu an için yayınlanmış ödev veya soru bulunmamaktadır.</p>';
+        } else {
+            filteredHw.forEach(item => {
+                let node = document.createElement('div');
+                node.className = 'assignment-item';
+                let markup = `<div style="font-size:12px; color:var(--text-muted); font-weight:600;">YAYIN TARİHİ: ${item.date}</div>`;
+                if(item.text) markup += `<p style="margin-top:10px; font-size:14px; line-height:1.5;">${item.text}</p>`;
+                
+                // Polyfill back-compatibility with old 'image' field and support new 'fileData'
+                let fileSource = item.fileData || item.image;
+                let isPdf = item.fileType && item.fileType.includes('pdf');
+                
+                if(fileSource) {
+                    if(isPdf) {
+                        markup += `<br><a href="${fileSource}" download="odev-ek-materyal.pdf" class="pdf-badge">📄 Ekli Ödev PDF Dokümanını İndir</a>`;
+                    } else {
+                        markup += `<img src="${fileSource}" class="assignment-img">`;
+                    }
+                }
+                node.innerHTML = markup;
+                streamContainer.appendChild(node);
+            });
+        }
+    }
+
+    function persistStudentQotdAnswerData() {
+        let allQotdRegistry = JSON.parse(localStorage.getItem('qotd'));
+        let targetedQotd = allQotdRegistry[authenticatedUser.grade];
+        if(!targetedQotd) return;
+
+        const content = document.getElementById('std-qotd-response-input').value;
+        if(!authenticatedUser.answers) authenticatedUser.answers = {};
+        authenticatedUser.answers[targetedQotd.id] = content;
+        synchronizeUserProfileToStorage(authenticatedUser);
+        alert("Çözüm ve yanıt metniniz başarıyla sisteme mühürlendi.");
+    }
+
+    function persistStudentPersonalNotes() {
+        authenticatedUser.notes = document.getElementById('std-personal-notes-input').value;
+        synchronizeUserProfileToStorage(authenticatedUser);
+        alert("Çalışma notlarınız yerel veritabanınızda başarıyla güncellendi.");
+    }
+</script>
+</body>
+</html>
